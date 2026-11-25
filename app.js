@@ -13,6 +13,17 @@ function saveToStorage() {
 function renderProducts() {
   productList.innerHTML = '';
 
+  if (products.length === 0) {
+    productList.innerHTML = `
+      <tr>
+        <td colspan="5" style="text-align: center; color: #6b7280;">
+          No hay productos registrados todavía.
+        </td>
+      </tr>
+    `;
+    return;
+  }
+
   products.forEach((product) => {
     const row = document.createElement('tr');
     row.innerHTML = `
@@ -47,6 +58,9 @@ function deleteProduct(id) {
   if (!confirmed) return;
 
   products = products.filter((p) => p.id !== id);
+  if (Number(productIdInput.value) === id) {
+    resetForm();
+  }
   saveToStorage();
   renderProducts();
 }
@@ -67,6 +81,11 @@ form.addEventListener('submit', (e) => {
   const name = document.getElementById('name').value.trim();
   const price = parseFloat(document.getElementById('price').value);
   const stock = parseInt(document.getElementById('stock').value, 10);
+
+  if (!name || isNaN(price) || price <= 0 || isNaN(stock) || stock < 0) {
+    alert('Por favor ingresa un nombre válido, un precio mayor a 0 y una cantidad igual o mayor a 0.');
+    return;
+  }
 
   if (id) {
     const index = products.findIndex((p) => p.id === Number(id));
