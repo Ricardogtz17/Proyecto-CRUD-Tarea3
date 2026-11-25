@@ -42,6 +42,15 @@ function editProduct(id) {
   cancelBtn.classList.remove('hidden');
 }
 
+function deleteProduct(id) {
+  const confirmed = confirm('¿Estás seguro de que deseas eliminar este producto?');
+  if (!confirmed) return;
+
+  products = products.filter((p) => p.id !== id);
+  saveToStorage();
+  renderProducts();
+}
+
 function resetForm() {
   form.reset();
   productIdInput.value = '';
